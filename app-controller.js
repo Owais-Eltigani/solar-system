@@ -12,7 +12,7 @@ window.onload = function() {
             if (res.ok) {
                 return res.json();
             }
-            thrownewError('Request failed');
+            throw new Error('Request failed');
         }).catch(function(error) {
             console.log(error);
         })
@@ -31,7 +31,7 @@ if (btn) {
 
 function func() {
     const planet_id = document.getElementById("planetID").value
-    console.log("onClick Submit - Request Planet ID - " + planet_id)
+    console.log("onClick Submit - Request Planet ID is: " + planet_id)
 
     fetch("/planet", {
             method: "POST",
@@ -46,10 +46,13 @@ function func() {
             if (res2.ok) {
                 return res2.json();
             }
-            thrownewError('Request failed.');
-        }).catch(function(error) {
-            alert("Ooops, We have 8 planets.\nSelect a number from 0 - 8")
-            console.log(error);
+
+            return res2.json()
+                .then(function(errorBody) {
+                    throw new Error(errorBody.error || 'Request failed.');
+                }, function() {
+                    throw new Error('Request failed.');
+                });
         })
         .then(function(data) {
             document.getElementById('planetName').innerHTML = ` ${data.name} `
@@ -62,6 +65,10 @@ function func() {
             document.getElementById('planetDescription').innerHTML = planet_description.replace(/(.{80})/g, "$1<br>");
 
           
+        })
+        .catch(function(error) {
+            alert(error.message || "Ooops, We have 8 planets.\nSelect a number from 0 - 8")
+            console.log(error);
         });
 
 }

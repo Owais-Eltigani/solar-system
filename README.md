@@ -44,6 +44,7 @@ If the installation was successful, you should be able to run the following comm
 ## Run Application
     $ npm start
 
+On first startup with an empty database, the app automatically seeds the `planets` collection with default solar system records (`id` 0-8).
+
 ## Access Application on Browser
     http://localhost:3000/
-
